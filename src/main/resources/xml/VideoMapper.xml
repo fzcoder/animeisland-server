@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.animeisland.mapper.VideoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.animeisland.entity.Video">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="media_id" property="mediaId" />
+        <result column="filepath" property="filepath" />
+        <result column="filename" property="filename" />
+        <result column="quality" property="quality" />
+        <result column="order_in_media" property="orderInMedia" />
+        <result column="part_number" property="partNumber" />
+        <result column="part_unit" property="partUnit" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, media_id, filepath, filename, quality, order_in_media, part_number, part_unit
+    </sql>
+
+</mapper>

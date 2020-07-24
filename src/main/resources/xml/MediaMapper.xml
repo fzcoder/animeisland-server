@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.animeisland.mapper.MediaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.animeisland.entity.Media">
+        <id column="id" property="id" />
+        <result column="name_zh" property="nameZh" />
+        <result column="name_orgin" property="nameOrgin" />
+        <result column="name_firstchar" property="nameFirstchar" />
+        <result column="category_name" property="categoryName" />
+        <result column="type_name" property="typeName" />
+        <result column="total" property="total" />
+        <result column="release_time" property="releaseTime" />
+        <result column="introduction" property="introduction" />
+        <result column="tags" property="tags" />
+        <result column="status" property="status" />
+        <result column="update_date" property="updateDate" />
+        <result column="weight" property="weight" />
+        <result column="homepage_recommend" property="homepageRecommend" />
+        <result column="has_series" property="hasSeries" />
+        <result column="series_id" property="seriesId" />
+        <result column="name_in_series" property="nameInSeries" />
+        <result column="order_in_series" property="orderInSeries" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name_zh, name_orgin, name_firstchar, category_name, type_name, total, release_time, introduction, tags, status, update_date, weight, homepage_recommend, has_series, series_id, name_in_series, order_in_series
+    </sql>
+
+</mapper>
