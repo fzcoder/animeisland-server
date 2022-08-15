@@ -1,0 +1,32 @@
+package com.fzcoder.opensource.animeisland.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@PropertySource("classpath:application.properties")
+public class WebMvcConfig implements WebMvcConfigurer {
+
+	@Value("${http.cors.path}")
+	private String path;
+	@Value("#{'${http.cors.allow-headers}'.split(',')}")
+	private String[] allowHeaders;
+	@Value("#{'${http.cors.allowed-origins}'.split(',')}")
+	private String[] allowedOrigins;
+	@Value("#{'${http.cors.allow-methods}'.split(',')}")
+	private String[] allowMethods;
+	@Value("${http.cors.max-age}")
+	private long maxAge;
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping(path)
+				.allowedHeaders(allowHeaders)
+				.allowedOrigins(allowedOrigins)
+				.allowedMethods(allowMethods)
+				.maxAge(maxAge);
+	}
+}

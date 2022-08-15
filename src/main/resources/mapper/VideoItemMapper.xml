@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzcoder.opensource.animeisland.mapper.VideoItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzcoder.opensource.animeisland.entity.VideoItem">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="title" property="title" />
+        <result column="poster" property="poster" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="last_modify_time" property="lastModifyTime" />
+        <result column="db_status" property="dbStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, title, `description`, poster, create_time, last_modify_time, db_status
+    </sql>
+
+    <sql id="Base_Table_Name">tb_video_item</sql>
+
+    <resultMap id="VideoItemVOMap" type="com.fzcoder.opensource.animeisland.vo.VideoItemVO">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="title" property="title" />
+        <result column="poster" property="poster" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="last_modify_time" property="lastModifyTime" />
+        <collection property="srcList"
+                    javaType="java.util.List"
+                    column="id"
+                    select="com.fzcoder.opensource.animeisland.mapper.VideoSourceMapper.selectVoByVideoId"/>
+    </resultMap>
+
+    <resultMap id="VideoItemFormMap" type="com.fzcoder.opensource.animeisland.dto.VideoItemForm">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="title" property="title" />
+        <result column="poster" property="poster" />
+        <result column="description" property="description" />
+        <collection property="srcList"
+                    javaType="java.util.List"
+                    column="id"
+                    select="com.fzcoder.opensource.animeisland.mapper.VideoSourceMapper.selectByVideoId"/>
+    </resultMap>
+
+    <select id="voPage" resultMap="VideoItemVOMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        ${ew.customSqlSegment}
+    </select>
+    <select id="getForm" resultMap="VideoItemFormMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        WHERE
+        id=#{id} AND db_status=0
+    </select>
+    <select id="selectVoById" resultMap="VideoItemVOMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        WHERE
+        id=#{id} AND db_status=0
+    </select>
+</mapper>

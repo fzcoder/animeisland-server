@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzcoder.opensource.animeisland.mapper.BangumiTagMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzcoder.opensource.animeisland.entity.BangumiTag">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="color_hex" property="colorHex" />
+        <result column="channel_id" property="channelId" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+        <result column="last_modify_time" property="lastModifyTime" />
+        <result column="db_status" property="dbStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, `name`, color_hex, channel_id, user_id, create_time, last_modify_time, db_status
+    </sql>
+
+    <insert id="insertBangumiTagItem">
+        INSERT INTO tb_video_bangumi_tag_item(id, bangumi_id, tag_id) VALUES (#{tagItem.id}, #{tagItem.bangumiId}, #{tagItem.tagId})
+    </insert>
+
+    <select id="selectTagsByBangumiId" resultType="com.fzcoder.opensource.animeisland.entity.BangumiTag">
+        SELECT *
+        FROM `tb_video_bangumi_tag`
+        WHERE `id` IN (SELECT `tag_id` FROM `tb_video_bangumi_tag_item` WHERE `bangumi_id` = #{bangumiId})
+        AND db_status=0
+    </select>
+
+    <delete id="removeBangumiTagItems">
+        DELETE FROM tb_video_bangumi_tag_item WHERE bangumi_id=#{bangumiId}
+    </delete>
+
+</mapper>

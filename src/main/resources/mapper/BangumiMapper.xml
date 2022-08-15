@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzcoder.opensource.animeisland.mapper.BangumiMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzcoder.opensource.animeisland.entity.Bangumi">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="title" property="title" />
+        <result column="origin_title" property="originTitle" />
+        <result column="description" property="description" />
+        <result column="release_date" property="releaseDate" />
+        <result column="release_year" property="releaseYear" />
+        <result column="release_month" property="releaseMonth" />
+        <result column="create_time" property="createTime" />
+        <result column="last_modify_time" property="lastModifyTime" />
+        <result column="cover" property="cover" />
+        <result column="country" property="country" />
+        <result column="status" property="status" />
+        <result column="channel_id" property="channelId" />
+        <result column="type_id" property="typeId" />
+        <result column="grade_id" property="gradeId" />
+        <result column="db_status" property="dbStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, title, origin_title, `description`, release_date, release_year, release_month,
+        create_time, last_modify_time, cover, country, `status`, channel_id, type_id, grade_id, db_status
+    </sql>
+
+    <sql id="Base_Table_Name">tb_video_bangumi</sql>
+
+    <resultMap id="BangumiVOMap" type="com.fzcoder.opensource.animeisland.vo.BangumiVO">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="title" property="title" />
+        <result column="origin_title" property="originTitle" />
+        <result column="description" property="description" />
+        <result column="release_date" property="releaseDate" />
+        <result column="release_year" property="releaseYear" />
+        <result column="release_month" property="releaseMonth" />
+        <result column="create_time" property="createTime" />
+        <result column="last_modify_time" property="lastModifyTime" />
+        <result column="cover" property="cover" />
+        <result column="country" property="country" />
+        <result column="status" property="status" />
+        <association property="channel"
+                     javaType="com.fzcoder.opensource.animeisland.entity.Channel"
+                     column="channel_id"
+                     select="com.fzcoder.opensource.animeisland.mapper.ChannelMapper.selectById"/>
+        <association property="type"
+                     javaType="com.fzcoder.opensource.animeisland.entity.BangumiType"
+                     column="type_id"
+                     select="com.fzcoder.opensource.animeisland.mapper.BangumiTypeMapper.selectById"/>
+        <association property="grade"
+                     javaType="com.fzcoder.opensource.animeisland.entity.BangumiGrade"
+                     column="grade_id"
+                     select="com.fzcoder.opensource.animeisland.mapper.BangumiGradeMapper.selectById"/>
+        <collection property="tags"
+                    javaType="java.util.List"
+                    column="id"
+                    select="com.fzcoder.opensource.animeisland.mapper.BangumiTagMapper.selectTagsByBangumiId"/>
+    </resultMap>
+
+    <select id="voPage" resultMap="BangumiVOMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        ${ew.customSqlSegment}
+    </select>
+    <select id="selectVoById" resultMap="BangumiVOMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        WHERE
+        id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzcoder.opensource.animeisland.mapper.VideoSourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzcoder.opensource.animeisland.entity.VideoSource">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="video_id" property="videoId" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="screenshot" property="screenshot" />
+        <result column="quality" property="quality" />
+        <result column="mime_type" property="mimeType" />
+        <result column="url" property="url" />
+        <result column="create_time" property="createTime" />
+        <result column="last_modify_time" property="lastModifyTime" />
+        <result column="db_status" property="dbStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, video_id, width, height, screenshot, quality, mime_type, url, create_time, last_modify_time, db_status
+    </sql>
+
+    <sql id="Base_Table_Name">tb_video_source</sql>
+
+    <resultMap id="VideoSourceVOMap" type="com.fzcoder.opensource.animeisland.vo.VideoSourceVO">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="video_id" property="videoId" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="screenshot" property="screenshot" />
+        <result column="quality" property="quality" />
+        <result column="mime_type" property="mimeType" />
+    </resultMap>
+
+    <select id="selectByVideoId" resultType="com.fzcoder.opensource.animeisland.entity.VideoSource">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        WHERE
+        video_id=#{videoId} AND db_status=0
+    </select>
+    <select id="selectVoByVideoId" resultMap="VideoSourceVOMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="Base_Table_Name" />
+        WHERE
+        video_id=#{videoId} AND db_status=0
+    </select>
+</mapper>
