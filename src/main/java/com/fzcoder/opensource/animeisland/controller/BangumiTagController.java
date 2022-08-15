@@ -80,6 +80,7 @@ public class BangumiTagController {
         UpdateWrapper<BangumiTag> uw = new UpdateWrapper<>();
         uw.eq("id", tag.getId());
         uw.set("last_modify_time", LocalDateTime.now());
+        uw.set("name", tag.getName());
         uw.set("color_hex", tag.getColorHex());
         if (bangumiTagService.update(uw)) {
             return R.ok("修改成功", null);
