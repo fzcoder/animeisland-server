@@ -54,6 +54,35 @@ public class BangumiController {
         return R.ok(bangumiService.getById(id));
     }
 
+    @GetMapping("/bangumi")
+    public R getList(@RequestParam Map<String, Object> params) {
+        QueryWrapper<Bangumi> qw = new QueryWrapper<>();
+        qw.eq(params.containsKey("uid") && !"all".equals(params.get("uid")),
+                "uid",
+                params.get("uid"));
+        qw.eq(params.containsKey("channel_id") && !"all".equals(params.get("channel_id")),
+                "channel_id",
+                params.get("channel_id"));
+        qw.eq(params.containsKey("type_id") && !"all".equals(params.get("type_id")),
+                "type_id",
+                params.get("type_id"));
+        qw.eq(params.containsKey("grade_id") && !"all".equals(params.get("grade_id")),
+                "grade_id",
+                params.get("grade_id"));
+        qw.eq(params.containsKey("release_year") && !"all".equals(params.get("release_year")),
+                "release_year",
+                params.get("release_year"));
+        qw.eq(params.containsKey("release_month") && !"all".equals(params.get("release_month")),
+                "release_month",
+                params.get("release_month"));
+        qw.eq(params.containsKey("status") && !"-1".equals(params.get("status")),
+                "status",
+                params.get("status"));
+        qw.eq("db_status", 0);
+        qw.like("title", params.getOrDefault("key", ""));
+        return R.ok(bangumiService.list(qw));
+    }
+
     @GetMapping("/bangumi/view/{id}")
     public R getView(@PathVariable("id") String id) {
         return R.ok(bangumiService.getVoById(id));
@@ -61,7 +90,6 @@ public class BangumiController {
 
     @GetMapping("/bangumi/page")
     public R getPage(@RequestParam("uid") String uid,
-                     @RequestParam("key") String key,
                      @RequestParam("page_num") long pageNum,
                      @RequestParam("page_size") long pageSize,
                      @RequestParam Map<String, Object> params) {
@@ -86,8 +114,8 @@ public class BangumiController {
         qw.eq(params.containsKey("status") && !"-1".equals(params.get("status")),
                 "status",
                 params.get("status"));
-        qw.like("title", key);
-        qw.like("description", key);
+        qw.like("title", params.getOrDefault("key", ""));
+        qw.like("description", params.getOrDefault("key", ""));
         qw.orderBy(true, false, "create_time");
         return R.ok(bangumiService.voPage(new Page<>(pageNum, pageSize), qw));
     }

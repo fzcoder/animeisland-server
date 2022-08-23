@@ -7,21 +7,24 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author Zhen Fang
+ * @version 1.0
+ * @date 2022/8/20 1:11
+ */
 @Data
-@TableName("tb_video_episode")
-public class Episode {
+@TableName("tb_video_series_item")
+public class SeriesItem {
     @TableId("id")
     private String id;
-    @TableField("title")
-    private String title;
+    @TableField("name")
+    private String name;
+    @TableField("series_id")
+    private String seriesId;
     @TableField("bangumi_id")
     private String bangumiId;
-    @TableField("video_id")
-    private String videoId;
-    @TableField("order_in_bangumi")
-    private Integer orderInBangumi;
-    @TableField("order_name")
-    private String orderName;
+    @TableField("order_in_series")
+    private Integer orderInSeries;
     @TableField("create_time")
     private LocalDateTime createTime;
     @TableField("last_modify_time")

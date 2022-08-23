@@ -7,5 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IEpisodeService extends IService<Episode> {
-    List<Episode> parseJsonForms(HttpServletRequest request);
+    boolean saveEpisode(Episode episode);
+    int getCountByBangumiId(String bangumiId);
+    boolean changeOrderInBangumi(List<Episode> episodes);
+    boolean deleteEpisodeById(String id);
+    boolean deleteEpisodesByIds(List<String> ids);
 }

@@ -6,6 +6,6 @@ import com.fzcoder.opensource.animeisland.service.ISeriesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
-@Service("CloudXVideo_SeriesServiceImpl")
+@Service("video_SeriesServiceImpl")
 public class SeriesServiceImpl extends ServiceImpl<SeriesMapper, Series> implements ISeriesService {
 }
