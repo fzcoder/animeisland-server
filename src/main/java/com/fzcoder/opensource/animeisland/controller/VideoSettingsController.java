@@ -22,7 +22,7 @@ public class VideoSettingsController {
         this.videoSettingsService = videoSettingsService;
     }
 
-    /* @GetMapping("/settings")
+    @GetMapping("/settings")
     public R getVideoSettings(@RequestParam("user_id") String userId) {
         return R.ok(videoSettingsService.getVideoSettingsByUserId(userId));
     }
@@ -34,5 +34,5 @@ public class VideoSettingsController {
         } else {
             return R.badRequest("", null);
         }
-    } */
+    }
 }

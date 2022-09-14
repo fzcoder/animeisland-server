@@ -45,6 +45,14 @@ public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> impl
     }
 
     @Override
+    public boolean saveEpisodes(List<Episode> episodes) {
+        for (Episode episode : episodes) {
+            saveEpisode(episode);
+        }
+        return true;
+    }
+
+    @Override
     public int getCountByBangumiId(String bangumiId) {
         QueryWrapper<Episode> wrapper = new QueryWrapper<>();
         wrapper.eq("bangumi_id", bangumiId);
@@ -58,9 +66,7 @@ public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> impl
             wrapper.set("order_in_bangumi", episode.getOrderInBangumi());
             wrapper.set("last_modify_time", LocalDateTime.now());
             wrapper.eq("id", episode.getId());
-            if (!update(wrapper)) {
-                return false;
-            }
+            update(wrapper);
         }
         return true;
     }
@@ -77,9 +83,7 @@ public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> impl
         wrapper.orderByDesc("order_in_bangumi");
         List<Episode> episodes = list(wrapper);
         for (Episode episode : episodes) {
-            if (!deleteEpisodeById(episode.getId())) {
-                return false;
-            }
+            deleteEpisodeById(episode.getId());
         }
         return true;
     }

@@ -1,5 +1,6 @@
 package com.fzcoder.opensource.animeisland.controller;
 
+import com.fzcoder.opensource.animeisland.util.Strings;
 import com.fzcoder.opensource.animeisland.util.response.R;
 import com.fzcoder.opensource.animeisland.entity.Bangumi;
 import com.fzcoder.opensource.animeisland.service.IBangumiService;
@@ -25,6 +26,28 @@ public class BangumiController {
     @Autowired
     public BangumiController(@Qualifier("CloudXBangumi_BangumiServiceImpl") IBangumiService bangumiService) {
         this.bangumiService = bangumiService;
+    }
+
+    private <T> QueryWrapper<T> getListQueryWrapper(String uid,
+                                                    String keyword,
+                                                    String channelId,
+                                                    String typeId,
+                                                    String gradeId,
+                                                    String releaseYear,
+                                                    String releaseMonth,
+                                                    Integer status) {
+        QueryWrapper<T> qw = new QueryWrapper<>();
+        qw.eq("uid", uid);
+        qw.eq("db_status", 0);
+        qw.eq(Strings.isNotEqualAll(channelId), "channel_id", channelId);
+        qw.eq(Strings.isNotEqualAll(typeId), "type_id", typeId);
+        qw.eq(Strings.isNotEqualAll(gradeId), "grade_id", gradeId);
+        qw.eq(Strings.isNotEqualAll(releaseYear), "release_year", releaseYear);
+        qw.eq(Strings.isNotEqualAll(releaseMonth), "release_month", releaseMonth);
+        qw.eq(!"-1".equals(Integer.toString(status)), "status", status);
+        qw.and(w -> w.like("title", keyword).or().like("description", keyword));
+        qw.orderByDesc("release_date");
+        return qw;
     }
 
     @PostMapping("/bangumi")
@@ -55,32 +78,15 @@ public class BangumiController {
     }
 
     @GetMapping("/bangumi")
-    public R getList(@RequestParam Map<String, Object> params) {
-        QueryWrapper<Bangumi> qw = new QueryWrapper<>();
-        qw.eq(params.containsKey("uid") && !"all".equals(params.get("uid")),
-                "uid",
-                params.get("uid"));
-        qw.eq(params.containsKey("channel_id") && !"all".equals(params.get("channel_id")),
-                "channel_id",
-                params.get("channel_id"));
-        qw.eq(params.containsKey("type_id") && !"all".equals(params.get("type_id")),
-                "type_id",
-                params.get("type_id"));
-        qw.eq(params.containsKey("grade_id") && !"all".equals(params.get("grade_id")),
-                "grade_id",
-                params.get("grade_id"));
-        qw.eq(params.containsKey("release_year") && !"all".equals(params.get("release_year")),
-                "release_year",
-                params.get("release_year"));
-        qw.eq(params.containsKey("release_month") && !"all".equals(params.get("release_month")),
-                "release_month",
-                params.get("release_month"));
-        qw.eq(params.containsKey("status") && !"-1".equals(params.get("status")),
-                "status",
-                params.get("status"));
-        qw.eq("db_status", 0);
-        qw.like("title", params.getOrDefault("key", ""));
-        return R.ok(bangumiService.list(qw));
+    public R getList(@RequestParam("uid") String uid,
+                     @RequestParam(value = "key", required = false, defaultValue = "") String keyword,
+                     @RequestParam(value = "channel_id", required = false, defaultValue = "all") String channelId,
+                     @RequestParam(value = "type_id", required = false, defaultValue = "all") String typeId,
+                     @RequestParam(value = "grade_id", required = false, defaultValue = "all") String gradeId,
+                     @RequestParam(value = "release_year", required = false, defaultValue = "all") String releaseYear,
+                     @RequestParam(value = "release_month", required = false, defaultValue = "all") String releaseMonth,
+                     @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status) {
+        return R.ok(bangumiService.list(getListQueryWrapper(uid, keyword, channelId, typeId, gradeId, releaseYear, releaseMonth, status)));
     }
 
     @GetMapping("/bangumi/view/{id}")
@@ -92,32 +98,15 @@ public class BangumiController {
     public R getPage(@RequestParam("uid") String uid,
                      @RequestParam("page_num") long pageNum,
                      @RequestParam("page_size") long pageSize,
-                     @RequestParam Map<String, Object> params) {
-        QueryWrapper<BangumiVO> qw = new QueryWrapper<>();
-        // qw.eq("uid", uid);
-        qw.eq("db_status", 0);
-        qw.eq(params.containsKey("channel_id") && !"all".equals(params.get("channel_id")),
-                "channel_id",
-                params.get("channel_id"));
-        qw.eq(params.containsKey("type_id") && !"all".equals(params.get("type_id")),
-                "type_id",
-                params.get("type_id"));
-        qw.eq(params.containsKey("grade_id") && !"all".equals(params.get("grade_id")),
-                "grade_id",
-                params.get("grade_id"));
-        qw.eq(params.containsKey("release_year") && !"all".equals(params.get("release_year")),
-                "release_year",
-                params.get("release_year"));
-        qw.eq(params.containsKey("release_month") && !"all".equals(params.get("release_month")),
-                "release_month",
-                params.get("release_month"));
-        qw.eq(params.containsKey("status") && !"-1".equals(params.get("status")),
-                "status",
-                params.get("status"));
-        qw.like("title", params.getOrDefault("key", ""));
-        qw.like("description", params.getOrDefault("key", ""));
-        qw.orderBy(true, false, "create_time");
-        return R.ok(bangumiService.voPage(new Page<>(pageNum, pageSize), qw));
+                     @RequestParam(value = "key", required = false, defaultValue = "") String keyword,
+                     @RequestParam(value = "channel_id", required = false, defaultValue = "all") String channelId,
+                     @RequestParam(value = "type_id", required = false, defaultValue = "all") String typeId,
+                     @RequestParam(value = "grade_id", required = false, defaultValue = "all") String gradeId,
+                     @RequestParam(value = "release_year", required = false, defaultValue = "all") String releaseYear,
+                     @RequestParam(value = "release_month", required = false, defaultValue = "all") String releaseMonth,
+                     @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status) {
+        return R.ok(bangumiService.voPage(new Page<>(pageNum, pageSize),
+                getListQueryWrapper(uid, keyword, channelId, typeId, gradeId, releaseYear, releaseMonth, status)));
     }
 
     @PutMapping("/bangumi")

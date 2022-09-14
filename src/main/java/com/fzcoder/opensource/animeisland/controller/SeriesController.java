@@ -64,7 +64,7 @@ public class SeriesController {
                                 @RequestParam("page_size") long pageSize,
                                 @RequestParam Map<String, Object> params) {
         QueryWrapper<Series> qw = new QueryWrapper<>();
-        // qw.eq(params.containsKey("uid"), "uid", params.get("uid"));
+        qw.eq(params.containsKey("uid"), "uid", params.get("uid"));
         qw.eq("db_status", 0);
         qw.like(params.containsKey("key"), "name", params.get("key"));
         qw.orderBy(true, false, "create_time");

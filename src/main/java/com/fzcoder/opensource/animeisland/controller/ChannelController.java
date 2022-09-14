@@ -57,7 +57,7 @@ public class ChannelController {
     @GetMapping("/channel")
     public R getUserChannelList(@RequestParam("uid") String uid, @RequestParam Map<String, Object> params) {
         QueryWrapper<Channel> qw = new QueryWrapper<>();
-        // qw.eq("uid", uid);
+        qw.eq("uid", uid);
         qw.eq("db_status", 0);
         qw.like(params.containsKey("key"), "name", params.get("key"));
         qw.orderBy(true, true, "name");

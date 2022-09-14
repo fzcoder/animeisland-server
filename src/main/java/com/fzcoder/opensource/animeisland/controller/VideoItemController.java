@@ -1,5 +1,6 @@
 package com.fzcoder.opensource.animeisland.controller;
 
+import com.fzcoder.opensource.animeisland.util.Strings;
 import com.fzcoder.opensource.animeisland.util.response.R;
 import com.fzcoder.opensource.animeisland.dto.VideoItemForm;
 import com.fzcoder.opensource.animeisland.entity.VideoItem;
@@ -31,6 +32,16 @@ public class VideoItemController {
                                @Qualifier("video_VideoSourceServiceImpl") IVideoSourceService videoSourceService) {
         this.videoItemService = videoItemService;
         this.videoSourceService = videoSourceService;
+    }
+
+    private <T> QueryWrapper<T> getListQueryWrapper(String uid,
+                                                    String keyword) {
+        QueryWrapper<T> qw = new QueryWrapper<>();
+        qw.eq("uid", uid);
+        qw.eq("db_status", 0);
+        qw.and(w -> w.like("title", keyword).or().like("description", keyword));
+        qw.orderByDesc("create_time");
+        return qw;
     }
 
     @PostMapping("/item")
@@ -118,16 +129,11 @@ public class VideoItemController {
 
     @GetMapping("/item/page")
     public R getPage(@RequestParam("uid") String uid,
-                     @RequestParam("key") String key,
                      @RequestParam("page_num") long pageNum,
-                     @RequestParam("page_size") long pageSize) {
-        QueryWrapper<VideoItemVO> qw = new QueryWrapper<>();
-        // qw.eq("uid", uid);
-        qw.eq("db_status", 0);
-        qw.like("title", key);
-        qw.like("description", key);
-        qw.orderBy(true, false, "create_time");
-        return R.ok(videoItemService.voPage(new Page<>(pageNum, pageSize), qw));
+                     @RequestParam("page_size") long pageSize,
+                     @RequestParam(value = "key", required = false, defaultValue = "") String key) {
+        return R.ok(videoItemService.voPage(new Page<>(pageNum, pageSize),
+                getListQueryWrapper(uid, key)));
     }
 
     @PutMapping("/item")

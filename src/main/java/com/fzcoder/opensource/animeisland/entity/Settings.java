@@ -21,4 +21,8 @@ public class Settings {
     private String websiteHost;
     @TableField("website_brand")
     private String websiteBrand;
+    @TableField("video_resource_host")
+    private String videoResourceHost;
+    @TableField("video_resource_dir")
+    private String videoResourceDir;
 }

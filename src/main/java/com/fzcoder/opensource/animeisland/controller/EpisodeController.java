@@ -43,6 +43,14 @@ public class EpisodeController {
             return R.badRequest("添加失败!", null);
         }
     }
+    @PostMapping("/episode/batch")
+    public R saveBatch(@RequestBody List<Episode> items) {
+        if (episodeService.saveEpisodes(items)) {
+            return R.ok("添加成功!", null);
+        } else {
+            return R.badRequest("添加失败!", null);
+        }
+    }
     @GetMapping("/episode/form/{id}")
     public R getForm(@PathVariable("id") String id) {
         return R.ok(episodeService.getById(id));
